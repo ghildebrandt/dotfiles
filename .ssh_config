@@ -1,0 +1,26 @@
+Host truenas
+  HostName truenas.hinbin.lab
+  User root
+  IdentityFile ~/.ssh/id_vaultwarden
+  IdentitiesOnly yes
+Host piedge
+  HostName piedge.hinbin.lab
+  User kage
+  IdentityFile ~/.ssh/id_pihole
+  IdentitiesOnly yes
+Host hetzner
+  HostName u559702.your-storagebox.de
+  User u559702
+  Port 23
+  IdentityFile ~/.ssh/id_hetzner
+  IdentitiesOnly yes
+Host forge.hinbin.lab
+  HostName forge.hinbin.lab
+  User git
+  IdentityFile ~/.ssh/id_forgejo
+  IdentitiesOnly yes
+Host abacus
+  HostName 9ef49ed04.ssh4.abacusai.cloud
+  User ubuntu
+  Port 22075
+  IdentityFile ~/.ssh/id_abacus
