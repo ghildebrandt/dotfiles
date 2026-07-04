@@ -130,14 +130,21 @@ This is automatically added to `.zshrc`.
 
 ### Permission errors with Ansible
 
-If you get permission errors, the playbook requests sudo via `become: yes`. Make sure your user can run sudo without a password:
+The `install.sh` script includes `--ask-become-pass` to prompt for your sudo password when needed. Enter your password when prompted.
+
+Alternatively, if you want to avoid entering your password, configure sudo to not require it:
 
 ```bash
 sudo visudo
-# Add: %sudo ALL=(ALL) NOPASSWD: ALL
+# Add this line at the end:
+%sudo ALL=(ALL) NOPASSWD: ALL
 ```
 
-Or run with `ansible-playbook --ask-become-pass` to enter your password.
+Then you can run the playbook directly without password prompts:
+
+```bash
+ansible-playbook -i ansible/inventory ansible/playbook.yaml
+```
 
 ## Resources
 
