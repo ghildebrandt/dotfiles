@@ -1,0 +1,25 @@
+---
+- name: Set Zsh as default shell
+  become: yes
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /home/linuxbrew/.linuxbrew/bin/zsh
+
+- name: Link .zshrc
+  file:
+    src: "{{ playbook_dir }}/../home/.zshrc"
+    dest: ~/.zshrc
+    state: link
+    force: true
+
+- name: Create .config directory
+  file:
+    path: ~/.config
+    state: directory
+
+- name: Link starship.toml
+  file:
+    src: "{{ playbook_dir }}/../home/.config/starship.toml"
+    dest: ~/.config/starship.toml
+    state: link
+    force: true

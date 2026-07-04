@@ -1,0 +1,62 @@
+# Starship configuration for modern shell prompt
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$nodejs\
+$python\
+$rust\
+$docker_context\
+$line_break\
+$jobs\
+$cmd_status\
+$character"""
+
+add_newline = true
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+format = "[$path]($style)[$read_only]($read_only_style) "
+
+[git_branch]
+symbol = "🌱 "
+format = "on [$symbol$branch]($style) "
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+conflicted = "🏳"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "$${count}"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
+
+[nodejs]
+symbol = "⬢ "
+format = "via [$symbol($version )]($style)"
+
+[python]
+symbol = "🐍 "
+format = 'via [$symbol($version )]($style)'
+
+[docker_context]
+symbol = "🐳 "
+format = "via [$symbol$context]($style) "
+
+[cmd_status]
+symbol = "❌"
+success_symbol = ""
+format = "[$symbol($status)]($style) "
+disabled = false

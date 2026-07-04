@@ -1,0 +1,20 @@
+---
+- name: Update APT cache
+  become: true
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install APT packages
+  become: true
+  apt:
+    name:
+      - build-essential
+      - procps
+      - curl
+      - dnsutils
+      - file
+      - git
+      - ca-certificates
+      - python3-pip
+    state: present

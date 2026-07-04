@@ -1,0 +1,7 @@
+---
+- name: Link .gitconfig
+  file:
+    src: "{{ playbook_dir }}/../home/.gitconfig"
+    dest: ~/.gitconfig
+    state: link
+    force: true

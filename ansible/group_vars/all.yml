@@ -1,0 +1,4 @@
+---
+# Common variables for all hosts
+brew_bin: "/home/linuxbrew/.linuxbrew/bin/brew"
+zsh_bin: "/home/linuxbrew/.linuxbrew/bin/zsh"

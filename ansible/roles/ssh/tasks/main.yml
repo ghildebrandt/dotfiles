@@ -1,0 +1,13 @@
+---
+- name: Ensure .ssh directory exists
+  file:
+    path: ~/.ssh
+    state: directory
+    mode: "0700"
+
+- name: Link SSH config
+  file:
+    src: "{{ playbook_dir }}/../home/.ssh/config"
+    dest: ~/.ssh/config
+    state: link
+    force: true

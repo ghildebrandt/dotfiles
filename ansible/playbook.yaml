@@ -1,73 +1,12 @@
 ---
-- name: Bootstrap WSL with Homebrew, UV, and Zsh
+- name: Bootstrap WSL with Homebrew, modern tools, and Zsh
   hosts: localhost
   connection: local
-  vars:
-    # Required for Brew to work in the same session it is installed
-    brew_bin: "/home/linuxbrew/.linuxbrew/bin/brew"
-  
-  tasks:
-    - name: Install Homebrew dependencies (APT)
-      become: yes
-      apt:
-        name:
-          - build-essential
-          - procps
-          - curl
-          - dnsutils
-          - file
-          - git
-        state: present
-        update_cache: yes
 
-    - name: Check if Homebrew is installed
-      stat:
-        path: "{{ brew_bin }}"
-      register: brew_check
-
-    - name: Install Homebrew
-      shell: |
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      when: not brew_check.stat.exists
-      # Homebrew installation must NOT be run as sudo/root
-      become: no
-
-    - name: Ensure Homebrew is in PATH for this session
-      set_fact:
-        ansible_env_path: "{{ ansible_env.PATH }}:/home/linuxbrew/.linuxbrew/bin"
-
-    - name: Update Homebrew
-      homebrew:
-        update_homebrew: yes
-      become: no
-
-    - name: Install tools via Homebrew
-      homebrew:
-        name:
-          - uv
-          - zsh
-          - starship  # Optional: A great shell prompt
-        state: present
-      become: no
-
-    - name: Install Oh My Zsh via script
-      # Note: OMZ isn't a "formula" in brew, but we install it to the home dir
-      git:
-        repo: https://github.com/ohmyzsh/ohmyzsh.git
-        dest: "~/.oh-my-zsh"
-        depth: 1
-      become: no
-
-    - name: Install Zsh syntax highlighting & autosuggestions (via Brew)
-      homebrew:
-        name:
-          - zsh-autosuggestions
-          - zsh-syntax-highlighting
-        state: present
-      become: no
-
-    - name: Set Zsh as default shell
-      become: yes
-      user:
-        name: "{{ ansible_user_id }}"
-        shell: /home/linuxbrew/.linuxbrew/bin/zsh
+  roles:
+    - common
+    - brew
+    - git
+    - ssh
+    - zsh
+    - vscode
