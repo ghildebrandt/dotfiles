@@ -1,0 +1,7 @@
+---
+- name: Create symlink to Obsidian vault in Windows Nextcloud
+  file:
+    src: "/mnt/c/Users/KGB/Nextcloud(Sicherung)(Sicherung)/Obsidian/greg_personal"
+    dest: ~/obsidian-vault
+    state: link
+    force: true
