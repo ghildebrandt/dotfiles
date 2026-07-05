@@ -6,7 +6,9 @@
   roles:
     - common
     - brew
+    - docker
     - git
     - ssh
     - zsh
     - vscode
+    - obsidian
