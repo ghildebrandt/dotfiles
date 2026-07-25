@@ -9,10 +9,11 @@ $git_status\
 $nodejs\
 $python\
 $rust\
+$golang\
 $docker_context\
 $line_break\
 $jobs\
-$cmd_status\
+$status\
 $character"""
 
 add_newline = true
@@ -51,11 +52,19 @@ format = "via [$symbol($version )]($style)"
 symbol = "🐍 "
 format = 'via [$symbol($version )]($style)'
 
+[rust]
+symbol = "🦀 "
+format = "via [$symbol($version )]($style)"
+
+[golang]
+symbol = "🐹 "
+format = "via [$symbol($version )]($style)"
+
 [docker_context]
 symbol = "🐳 "
 format = "via [$symbol$context]($style) "
 
-[cmd_status]
+[status]
 symbol = "❌"
 success_symbol = ""
 format = "[$symbol($status)]($style) "
