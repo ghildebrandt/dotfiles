@@ -19,3 +19,5 @@
 	unstage = reset HEAD --
 	last = log -1 HEAD
 	visual = log --graph --oneline --all
+[credential]
+	helper = cache --timeout=2592000
