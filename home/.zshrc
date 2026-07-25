@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+# Homebrew PATH (must be first to make other tools available)
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 # Initialize Starship prompt
 eval "$(starship init zsh)"
 
@@ -29,9 +32,6 @@ if [[ -f /home/linuxbrew/.linuxbrew/share/zsh-autosuggestions/zsh-autosuggestion
   source /home/linuxbrew/.linuxbrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
-# Homebrew PATH
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
 # direnv hook
 if command -v direnv &> /dev/null; then
   eval "$(direnv hook zsh)"
@@ -47,6 +47,10 @@ export NVM_DIR="$(brew --prefix nvm)"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
+# Go configuration
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
+
 # Auto-switch Node version based on .nvmrc
 load-nvmrc() {
   if [[ -f .nvmrc ]]; then
@@ -56,6 +60,15 @@ load-nvmrc() {
 autoload -U add-zsh-hook
 add-zsh-hook chpwd load-nvmrc
 load-nvmrc
+
+# Docker configuration for Windows Docker Desktop in WSL
+#if grep -qi microsoft /proc/version &> /dev/null; then
+#  if [[ -S /mnt/wsl/docker.sock ]]; then
+#    export DOCKER_HOST=unix:///mnt/wsl/docker.sock
+#  else
+#    export DOCKER_HOST=tcp://127.0.0.1:2375
+#  fi
+#fi
 
 # fzf integration (if installed)
 if [[ -f ~/.fzf.zsh ]]; then
