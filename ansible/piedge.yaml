@@ -1,0 +1,8 @@
+---
+- name: Bootstrap edge router (Docker + Git-synced compose stacks)
+  hosts: piedge
+  gather_facts: true
+
+  roles:
+    - docker_engine
+    - git_stacks

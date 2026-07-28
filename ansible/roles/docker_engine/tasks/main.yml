@@ -1,0 +1,60 @@
+---
+- name: Install Docker prerequisites
+  become: true
+  apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+    update_cache: true
+
+- name: Create APT keyrings directory
+  become: true
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Add Docker's official GPG key
+  become: true
+  get_url:
+    url: "https://download.docker.com/linux/debian/gpg"
+    dest: /etc/apt/keyrings/docker.asc
+    mode: "0644"
+
+- name: Add Docker APT repository
+  become: true
+  apt_repository:
+    repo: >-
+      deb [arch={{ ansible_architecture | regex_replace('aarch64', 'arm64') | regex_replace('armv7l', 'armhf') }}
+      signed-by=/etc/apt/keyrings/docker.asc]
+      https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable
+    filename: docker
+    state: present
+
+- name: Install Docker Engine + Compose plugin
+  become: true
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: true
+
+- name: Add {{ ansible_user_id }} to docker group
+  become: true
+  user:
+    name: "{{ ansible_user_id }}"
+    groups: docker
+    append: true
+
+- name: Ensure Docker service is enabled and running
+  become: true
+  systemd:
+    name: docker
+    enabled: true
+    state: started

@@ -1,0 +1,6 @@
+---
+# Vars for the piedge host (Raspberry Pi edge router)
+# TODO: repo URL an das tatsächliche Stacks-Repo anpassen
+stacks_repo: "https://forge.hinbin.lab/kgb/piedge-stacks.git"
+stacks_repo_branch: "main"
+stacks_dest: "/opt/stacks"

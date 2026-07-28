@@ -1,0 +1,45 @@
+---
+- name: Ensure stacks destination exists
+  file:
+    path: "{{ stacks_dest }}"
+    state: directory
+    mode: "0755"
+
+- name: Clone/update stacks repository
+  git:
+    repo: "{{ stacks_repo }}"
+    dest: "{{ stacks_dest }}"
+    version: "{{ stacks_repo_branch }}"
+    update: true
+    force: true
+  register: stacks_checkout
+
+- name: Discover compose stack directories
+  find:
+    paths: "{{ stacks_dest }}"
+    patterns: "docker-compose.yml,docker-compose.yaml,compose.yml,compose.yaml"
+    recurse: true
+    depth: 2
+  register: compose_files
+
+- name: Pull latest images for each stack
+  command: docker compose pull
+  args:
+    chdir: "{{ item.path | dirname }}"
+  loop: "{{ compose_files.files }}"
+  loop_control:
+    label: "{{ item.path | dirname | basename }}"
+  changed_when: false
+
+- name: Deploy/update each stack
+  command: docker compose up -d --remove-orphans
+  args:
+    chdir: "{{ item.path | dirname }}"
+  loop: "{{ compose_files.files }}"
+  loop_control:
+    label: "{{ item.path | dirname | basename }}"
+  register: compose_up
+  changed_when: >-
+    'Started' in (compose_up.stderr | default('')) or
+    'Created' in (compose_up.stderr | default('')) or
+    'Recreate' in (compose_up.stderr | default(''))
