@@ -3,6 +3,13 @@
 # Homebrew PATH (must be first to make other tools available)
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+# Rebuild fpath in case a stale exported FPATH (e.g. pointing at a zsh
+# version removed by a previous `brew upgrade`) leaked in from the parent
+# environment. Drop any dangling versioned zsh Cellar function dirs and
+# re-add the one for the currently installed zsh.
+fpath=(${fpath:#*/Cellar/zsh/*/share/zsh/functions})
+fpath+=("$(brew --prefix zsh)/share/zsh/functions")
+
 # Initialize Starship prompt
 eval "$(starship init zsh)"
 
