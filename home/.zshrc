@@ -477,3 +477,7 @@ fi
 if [[ -d ~/.opencode/bin ]]; then
   export PATH=$HOME/.opencode/bin:$PATH
 fi
+
+
+# mise activation
+eval "$(mise activate zsh)"
