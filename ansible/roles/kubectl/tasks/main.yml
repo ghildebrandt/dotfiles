@@ -1,0 +1,13 @@
+---
+- name: Ensure .kube directory exists
+  file:
+    path: ~/.kube
+    state: directory
+    mode: "0700"
+
+- name: Link kubeconfig
+  file:
+    src: "{{ playbook_dir }}/../home/.kube/config"
+    dest: ~/.kube/config
+    state: link
+    force: true

@@ -9,6 +9,7 @@
     - docker
     - git
     - ssh
+    - kubectl
     - zsh
     - vscode
     - obsidian
