@@ -10,15 +10,15 @@
   when: not brew_check.stat.exists
   become: no
 
-- name: Ensure Homebrew is in PATH for this session
-  set_fact:
-    ansible_env_path: "{{ ansible_env.PATH }}:/home/linuxbrew/.linuxbrew/bin"
-
 - name: Update Homebrew
   homebrew:
     update_homebrew: yes
   become: no
+  environment:
+    PATH: "/home/linuxbrew/.linuxbrew/bin:{{ ansible_env.PATH }}"
 
 - name: Install packages via Brewfile
   command: brew bundle --file={{ playbook_dir }}/../Brewfile
   become: no
+  environment:
+    PATH: "/home/linuxbrew/.linuxbrew/bin:{{ ansible_env.PATH }}"
