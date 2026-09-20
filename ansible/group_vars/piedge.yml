@@ -4,3 +4,10 @@
 stacks_repo: "https://forge.hinbin.lab/kgb/piedge-stacks.git"
 stacks_repo_branch: "main"
 stacks_dest: "/opt/stacks"
+
+# TrueNAS certificates share, mounted on the host and bind-mounted into containers
+truenas_host: "192.168.178.3"
+truenas_share: "certificates"
+truenas_cert_mount: "/mnt/truenas-certs"
+truenas_smb_user: "{{ vault_truenas_smb_user }}"
+truenas_smb_pass: "{{ vault_truenas_smb_pass }}"
