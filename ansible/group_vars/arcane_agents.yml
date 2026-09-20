@@ -1,0 +1,6 @@
+---
+# Vars for hosts running only arcane-agent (no full Arcane manager)
+truenas_host: "192.168.178.3"
+truenas_backup_export: "/mnt/pool/Backup"
+truenas_backup_mount: "/mnt/truenas-backup"
+local_backups_dir: "/srv/arcane-backups"

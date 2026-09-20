@@ -1,0 +1,61 @@
+---
+# Arcane keeps writing to {{ local_backups_dir }} on the host regardless of
+# TrueNAS availability. This role only adds a best-effort sync of that local
+# copy to TrueNAS — it never makes the agent/manager depend on the share.
+
+- name: Install nfs-common and rsync
+  become: true
+  apt:
+    name:
+      - nfs-common
+      - rsync
+    state: present
+
+- name: Ensure local Arcane backups directory exists
+  become: true
+  file:
+    path: "{{ local_backups_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure TrueNAS backup mount point exists
+  become: true
+  file:
+    path: "{{ truenas_backup_mount }}"
+    state: directory
+    mode: "0755"
+
+- name: Mount TrueNAS backup share (nofail so a reboot never blocks on it)
+  become: true
+  ansible.builtin.mount:
+    path: "{{ truenas_backup_mount }}"
+    src: "{{ truenas_host }}:{{ truenas_backup_export }}"
+    fstype: nfs
+    opts: "defaults,_netdev,nofail"
+    state: mounted
+  register: truenas_backup_mount_result
+  failed_when: false
+
+- name: Warn if TrueNAS backup share could not be mounted right now
+  debug:
+    msg: >-
+      Could not mount {{ truenas_backup_mount }} during provisioning
+      ({{ truenas_backup_mount_result.msg | default('unknown error') }}).
+      This is non-fatal: it's registered in /etc/fstab with 'nofail' and the
+      sync script skips gracefully whenever the share is unreachable.
+  when: truenas_backup_mount_result.failed | default(false)
+
+- name: Deploy backup sync script
+  become: true
+  template:
+    src: arcane-backup-sync.sh.j2
+    dest: /usr/local/bin/arcane-backup-sync.sh
+    mode: "0755"
+
+- name: Schedule backup sync via cron
+  become: true
+  cron:
+    name: "sync arcane backups to truenas"
+    minute: "30"
+    hour: "*/6"
+    job: "/usr/local/bin/arcane-backup-sync.sh >> /var/log/arcane-backup-sync.log 2>&1"

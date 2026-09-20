@@ -1,0 +1,8 @@
+---
+- name: Bootstrap Arcane agent hosts (local backups + best-effort TrueNAS sync)
+  hosts: arcane_agents
+  gather_facts: true
+
+  roles:
+    - docker_engine
+    - arcane_backup_sync

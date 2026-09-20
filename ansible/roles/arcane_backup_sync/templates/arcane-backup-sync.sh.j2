@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Managed by Ansible (role: arcane_backup_sync). Do not edit by hand.
+#
+# Arcane writes its backups to {{ local_backups_dir }} regardless of whether
+# TrueNAS is reachable. This script best-effort syncs that local copy to the
+# TrueNAS NFS share. If the share isn't mounted, it logs and exits 0 so it
+# never blocks or breaks local backups.
+set -eu
+
+LOCAL_DIR="{{ local_backups_dir }}"
+REMOTE_MOUNT="{{ truenas_backup_mount }}"
+REMOTE_DEST="$REMOTE_MOUNT/{{ inventory_hostname }}"
+
+if ! mountpoint -q "$REMOTE_MOUNT"; then
+    echo "$(date -Is) WARNING: $REMOTE_MOUNT is not mounted, skipping sync to TrueNAS. Local backups in $LOCAL_DIR are unaffected." >&2
+    exit 0
+fi
+
+mkdir -p "$REMOTE_DEST"
+rsync -a --delete "$LOCAL_DIR/" "$REMOTE_DEST/"
+echo "$(date -Is) Synced $LOCAL_DIR to $REMOTE_DEST"
