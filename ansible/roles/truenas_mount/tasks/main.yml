@@ -8,7 +8,7 @@
 - name: Write CIFS credentials file
   become: true
   copy:
-    dest: /etc/truenas-certs.creds
+    dest: /etc/hinbin-certs.creds
     content: |
       username={{ truenas_smb_user }}
       password={{ truenas_smb_pass }}
@@ -29,5 +29,5 @@
     path: "{{ truenas_cert_mount }}"
     src: "//{{ truenas_host }}/{{ truenas_share }}"
     fstype: cifs
-    opts: "credentials=/etc/truenas-certs.creds,vers=3.0,ro,file_mode=0444,dir_mode=0555"
+    opts: "credentials=/etc/hinbin-certs.creds,vers=3.0,ro,file_mode=0444,dir_mode=0555"
     state: mounted
