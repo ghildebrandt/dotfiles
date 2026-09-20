@@ -1,9 +1,8 @@
 ---
-- name: Bootstrap edge router (Docker + Git-synced compose stacks)
+- name: Bootstrap edge router (Docker + TrueNAS cert share)
   hosts: piedge
   gather_facts: true
 
   roles:
     - docker_engine
     - truenas_mount
-    - git_stacks

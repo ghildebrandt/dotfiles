@@ -1,0 +1,5 @@
+---
+# Copy to group_vars/piedge/vault.yml and encrypt with:
+#   ansible-vault encrypt group_vars/piedge/vault.yml
+vault_truenas_smb_user: "<SMB_USERNAME>"
+vault_truenas_smb_pass: "<SMB_PASSWORD>"
