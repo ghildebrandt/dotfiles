@@ -90,6 +90,11 @@ alias tree='eza --tree'
 alias cat='bat'
 alias grep='grep --color=auto'
 alias cd='z'
+alias work='cd ~/code/cardxchange/ && code .'
+
+# Git Prune Aliases
+alias git-list-untracked='git fetch --prune && git branch -r | awk "{print \$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \$1}"'
+alias git-remove-untracked='git fetch --prune && git branch -r | awk "{print \$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \$1}" | xargs git branch -d'
 
 # Git aliases and functions (from ohmyzsh git plugin)
 autoload -Uz is-at-least
