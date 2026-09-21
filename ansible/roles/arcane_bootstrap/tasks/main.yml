@@ -1,0 +1,32 @@
+---
+# One-time bootstrap: Arcane can't git-sync itself before it exists, so this
+# clones the stacks repo and brings up only the arcane/ compose project
+# directly. Afterwards, add this same repo+path as a project inside Arcane's
+# UI — it will adopt the running container by compose project name, and all
+# future updates (including to Arcane itself) flow through git sync.
+
+- name: Ensure stacks destination exists
+  file:
+    path: "{{ stacks_dest }}"
+    state: directory
+    mode: "0755"
+
+- name: Clone/update stacks repository
+  git:
+    repo: "{{ stacks_repo }}"
+    dest: "{{ stacks_dest }}"
+    version: "{{ stacks_repo_branch }}"
+    update: true
+    force: true
+
+- name: Check if Arcane is already running
+  command: docker inspect -f '{{ "{{.State.Running}}" }}' arcane
+  register: arcane_running
+  changed_when: false
+  failed_when: false
+
+- name: Bring up Arcane directly (bootstrap only, not via Arcane itself)
+  command: docker compose up -d
+  args:
+    chdir: "{{ stacks_dest }}/arcane"
+  when: arcane_running.stdout != "true"

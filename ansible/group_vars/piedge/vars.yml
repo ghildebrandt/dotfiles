@@ -1,6 +1,12 @@
 ---
 # Vars for the piedge host (Raspberry Pi edge router)
 
+# Repo containing the compose stacks (incl. arcane/) — used only for the
+# one-time arcane_bootstrap role, not for ongoing stack management.
+stacks_repo: "https://github.com/ghildebrandt/homelab_docker.git"
+stacks_repo_branch: "main"
+stacks_dest: "/opt/stacks"
+
 # TrueNAS certificates share, mounted on the host and bind-mounted into containers
 truenas_host: "192.168.178.3"
 truenas_share: "certificates"

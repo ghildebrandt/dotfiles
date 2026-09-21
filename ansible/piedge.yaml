@@ -5,4 +5,5 @@
 
   roles:
     - docker_engine
+    - arcane_bootstrap
     - truenas_mount
