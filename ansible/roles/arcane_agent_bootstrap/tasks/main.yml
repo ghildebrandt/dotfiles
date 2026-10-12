@@ -1,0 +1,34 @@
+---
+# One-time bootstrap: brings up only the arcane-agent/ compose project
+# directly, pointed at the external Arcane manager (e.g. the TrueNAS Apps
+# catalog instance). This does not install the Arcane manager on this host.
+
+- name: Ensure stacks destination exists
+  file:
+    path: "{{ stacks_dest }}"
+    state: directory
+    mode: "0755"
+
+- name: Clone/update stacks repository
+  git:
+    repo: "{{ stacks_repo }}"
+    dest: "{{ stacks_dest }}"
+    version: "{{ stacks_repo_branch }}"
+    update: true
+    force: true
+
+- name: Check if Arcane agent is already running
+  command: docker inspect -f '{{ "{{.State.Running}}" }}' arcane-agent
+  register: arcane_agent_running
+  changed_when: false
+  failed_when: false
+
+- name: Bring up Arcane agent
+  command: docker compose up -d
+  args:
+    chdir: "{{ stacks_dest }}/arcane-agent"
+  environment:
+    MANAGER_API_URL: "{{ arcane_manager_api_url }}"
+    TOKEN: "{{ vault_arcane_agent_token }}"
+    ARCANE_DATA_VOLUME: "{{ arcane_data_volume }}"
+  when: arcane_agent_running.stdout != "true"

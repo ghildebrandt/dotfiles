@@ -3,3 +3,4 @@
 #   ansible-vault encrypt group_vars/piedge/vault.yml
 vault_truenas_smb_user: "<SMB_USERNAME>"
 vault_truenas_smb_pass: "<SMB_PASSWORD>"
+vault_arcane_agent_token: "<ARCANE_AGENT_ENROLLMENT_TOKEN>"

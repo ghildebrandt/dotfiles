@@ -1,11 +1,16 @@
 ---
 # Vars for the piedge host (Raspberry Pi edge router)
 
-# Repo containing the compose stacks (incl. arcane/) — used only for the
-# one-time arcane_bootstrap role, not for ongoing stack management.
+# Repo containing the compose stacks (incl. arcane-agent/) — used only for
+# the one-time arcane_agent_bootstrap role, not for ongoing stack management.
 stacks_repo: "https://github.com/ghildebrandt/homelab_docker.git"
 stacks_repo_branch: "main"
 stacks_dest: "/opt/stacks"
+
+# piedge runs only the arcane-agent, managed by the Arcane manager hosted on
+# TrueNAS — not the Arcane manager itself.
+arcane_manager_api_url: "http://192.168.178.3:3552"
+arcane_data_volume: "arcane_arcane-data"
 
 # TrueNAS certificates share, mounted on the host and bind-mounted into containers
 truenas_host: "192.168.178.3"
